@@ -1,0 +1,7 @@
+ball.o: ball.c ../src/ptask.h ../src/ptime.h ../src/rtmode.h \
+ ../src/pmutex.h ../src/tstat.h
+modes.o: modes.c ../src/ptask.h ../src/ptime.h ../src/rtmode.h
+pbarr_example.o: pbarr_example.c ../src/ptask.h ../src/ptime.h \
+ ../src/rtmode.h ../src/pbarrier.h
+pcp.o: pcp.c ../src/ptask.h ../src/ptime.h ../src/rtmode.h \
+ ../src/pmutex.h

@@ -1,0 +1,8 @@
+key.o: key.c
+key_opt.o: key_opt.c
+task_aperiodic.o: task_aperiodic.c ../src/ptask.h ../src/ptime.h \
+ ../src/rtmode.h
+task_create.o: task_create.c ../src/ptask.h ../src/ptime.h \
+ ../src/rtmode.h
+test_cores.o: test_cores.c ../src/ptask.h ../src/ptime.h ../src/rtmode.h
+time.o: time.c ../src/ptime.h
