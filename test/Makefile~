@@ -6,7 +6,7 @@ LD=gcc
 .SUFFIXES:
 .SUFFIXES: .o .c
 
-EXECS = time key key_opt test_cores task_create task_aperiodic
+EXECS = time key key_opt test_cores task_create task_aperiodic yann
 
 SRCS_time = time.c 
 OBJS_time = ${SRCS_time:.c=.o}
