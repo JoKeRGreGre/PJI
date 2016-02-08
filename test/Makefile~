@@ -1,5 +1,5 @@
 CFLAGS = -Wall -I../src/
-LDFLAGS=-L ../src -lptask -lpthread -lrt
+LDFLAGS=-L ../src -lptask -lpthread -lrt -std=c99
 CC=gcc
 LD=gcc
 
@@ -61,7 +61,7 @@ task_create: $(OBJS_task_create) ../src/libptask.a
 task_aperiodic: $(OBJS_task_aperiodic) ../src/libptask.a
 	$(LD) -o $@ $^ $(LDFLAGS)
 
-yann: $(OBJS_yann) ../src/libptask.a
+yann: $(OBJS_yann) ../src/libptask.a ./deadline_handler.c
 	$(LD) -o $@ $^ $(LDFLAGS)
 
 sig: $(OBJS_sig) ../src/libptask.a

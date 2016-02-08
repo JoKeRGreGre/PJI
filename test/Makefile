@@ -1,5 +1,5 @@
 CFLAGS = -Wall -I../src/
-LDFLAGS=-L ../src -lptask -lpthread -lrt
+LDFLAGS=-L ../src -lptask -lpthread -lrt 
 CC=gcc
 LD=gcc
 
