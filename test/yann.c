@@ -1,12 +1,13 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include "ptime.h"
 #include "ptask.h"
 #include "deadline_handler.h"
 
 void hello(){
 	int i;
-	timer_start();
+	timer_start(10);
 	for(i=1;i<=10;i++){
 		printf("hello\n");
 		ptask_wait_for_period();
@@ -29,7 +30,7 @@ int main(){
 	printf("creating task\n");
 
 	int pid = ptask_create_param(hello,&params);
-	create_deadline_handler(pid,10,5000);
+	create_deadline_handler(pid);
 	if (pid < 0) {
 		printf("Sudo ... : %d\n",pid);
 		exit(EXIT_FAILURE);
