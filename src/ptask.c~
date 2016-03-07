@@ -102,7 +102,7 @@ static void release_tp(int i)
 }
 
 // This is the task index as seen from the thread
-__thread int ptask_idx;
+static __thread int ptask_idx;
 
 // this is to be called from the thread and returns the 
 // current index

@@ -36,28 +36,22 @@ void str_add(str_time_deadline str){
 
 int i;
 for(i=0;i<MAX_TASKS;i++)
-	//if(tab[i].pid==0){
-		tab[i]=str;
-		printf("ajout effectue\n");
-		return;
-//	}	
+	if(tab[i].pid==0)
+		tab[i]=str;	
 
 }
 
 
 void timer_handler(int sig,siginfo_t *si,void *uc){
-printf("salut\n");
 int index = get_index_from_pid(sig);
-printf("temps exec : %ld\n",tab[index].temps_exec);
-printf("deadline : %ld\n",tab[index].dead_line);
 	tab[index].temps_exec=tab[index].temps_exec+tab[index].its.it_interval.tv_nsec;
+//printf("%ld\n",temps_exec);
+//printf("fin d'exec : %ld\n",dead_line);
 	if( tab[index].temps_exec>tab[index].dead_line){;
-		printf("fin d'exec : %ld\n",tab[index].dead_line);
 		timer_delete(tab[index].timer);
-		kill(tab[index].pid,SIGKILL);
+		//kill(tab[i].pid,SIGKILL);
+printf("fin d'exec : %ld\n",tab[index].dead_line);
 	}
-	else
-		timer_start(sig,10);
 }
 
 void create_deadline_handler(int task_pid){
@@ -66,8 +60,9 @@ void create_deadline_handler(int task_pid){
 	int pid=task_pid;
 	timer_t timer;
 	struct itimerspec its;
-	unsigned long dead_line =ptask_get_deadline(ptask_idx,SEC);
-dead_line *= 1000000000;
+	int dead_line =(unsigned long) 1000000;
+	
+
 
 	/*Creation de la sigaction*/
 	sa.sa_handler = timer_handler;
@@ -84,6 +79,7 @@ dead_line *= 1000000000;
 	str.pid=pid;
 	str_add(str);
 
+
 	/*Creation de l'event*/
 	sev.sigev_notify = SIGEV_SIGNAL;
 	sev.sigev_signo =SIG;
@@ -94,6 +90,7 @@ dead_line *= 1000000000;
 
 void timer_start(int pid,int milisec){
 int index = get_index_from_pid(pid);
+
 	/*Creation du timer*/
 	if(milisec<999){
 		tab[index].its.it_value.tv_sec=0;
@@ -106,12 +103,5 @@ int index = get_index_from_pid(pid);
 	tab[index].its.it_interval.tv_sec = tab[index].its.it_value.tv_sec;
 	tab[index].its.it_interval.tv_nsec = tab[index].its.it_value.tv_nsec;
 
-tab[index].its.it_value = 1;
-	printf("%d\n",tab[index].its.it_value);
-	int u =timer_settime(tab[index].timer,0,&(tab[index].its),NULL);
-
-	if (u < 0) {
-		printf("Erreur création timer\n");
-		exit(EXIT_FAILURE);
-	}
+	timer_settime(tab[index].timer,0,&tab[index].its,NULL);
 }

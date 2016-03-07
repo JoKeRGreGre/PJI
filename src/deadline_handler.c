@@ -106,8 +106,8 @@ int index = get_index_from_pid(pid);
 	tab[index].its.it_interval.tv_sec = tab[index].its.it_value.tv_sec;
 	tab[index].its.it_interval.tv_nsec = tab[index].its.it_value.tv_nsec;
 
-tab[index].its.it_value = 1;
-	printf("%d\n",tab[index].its.it_value);
+	printf("%d\n",tab[index].its.it_value.tv_nsec);
+	printf("%d\n",tab[index].its.it_value.tv_sec);
 	int u =timer_settime(tab[index].timer,0,&(tab[index].its),NULL);
 
 	if (u < 0) {

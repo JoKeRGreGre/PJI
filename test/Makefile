@@ -6,7 +6,7 @@ LD=gcc
 .SUFFIXES:
 .SUFFIXES: .o .c
 
-EXECS = time key key_opt test_cores task_create task_aperiodic yann sig
+EXECS = time key key_opt test_cores task_create task_aperiodic yann
 
 SRCS_time = time.c 
 OBJS_time = ${SRCS_time:.c=.o}
@@ -26,11 +26,9 @@ OBJS_task_create = ${SRCS_task_create:.c=.o}
 SRCS_task_aperiodic = task_aperiodic.c 
 OBJS_task_aperiodic = ${SRCS_task_aperiodic:.c=.o}
 
-SRCS_yann = yann.c 
+SRCS_yann = yann.c
 OBJS_yann = ${SRCS_yann:.c=.o}
 
-SRCS_sig = sig.c 
-OBJS_sig = ${SRCS_sig:.c=.o}
 
 
 all: $(EXECS)
@@ -61,11 +59,9 @@ task_create: $(OBJS_task_create) ../src/libptask.a
 task_aperiodic: $(OBJS_task_aperiodic) ../src/libptask.a
 	$(LD) -o $@ $^ $(LDFLAGS)
 
-yann: $(OBJS_yann) ../src/libptask.a ./deadline_handler.c
+yann: $(OBJS_yann) ../src/libptask.a
 	$(LD) -o $@ $^ $(LDFLAGS)
 
-sig: $(OBJS_sig) ../src/libptask.a
-	$(LD) -o $@ $^ $(LDFLAGS)
 
 
 clean:

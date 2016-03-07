@@ -4,7 +4,8 @@
 
 int main(){
 
-printf("task creation");
+printf("task creation\n");
+
 
 
 }
