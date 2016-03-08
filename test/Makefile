@@ -1,5 +1,5 @@
-CFLAGS = -Wall -I../src/
-LDFLAGS=-L ../src -lptask -lpthread -lrt 
+CFLAGS = -Wall -I../src/ -g
+LDFLAGS=-L ../src -lptask -lpthread -lrt -g
 CC=gcc
 LD=gcc
 
@@ -60,7 +60,7 @@ task_aperiodic: $(OBJS_task_aperiodic) ../src/libptask.a
 	$(LD) -o $@ $^ $(LDFLAGS)
 
 yann: $(OBJS_yann) ../src/libptask.a
-	$(LD) -o $@ $^ $(LDFLAGS)
+	$(LD) -o $@ $^ $(LDFLAGS) -std=c99
 
 
 

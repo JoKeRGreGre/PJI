@@ -9,8 +9,10 @@ int pid;
 
 void hello(){
 	int i;
+sleep(1);
 	timer_start(pid,10);
-	for(i=1;i<=10;i++){
+
+	for(i=1;i<=100;i++){
 		printf("hello\n");
 		ptask_wait_for_period();
 	}
@@ -25,11 +27,11 @@ int main(){
 	/*Reglages des parametres de la tache*/
 	tpars params = TASK_SPEC_DFL;
 	params.period = tspec_from(1, SEC);
-	ptask_param_deadline(params,5,SEC);
+	ptask_param_deadline(params,2,SEC);
 	params.priority = 1;
 	params.act_flag = NOW;
 	params.measure_flag = 1;
-	printf("creating task\n");
+	printf("creating tasks\n");
 
 	pid = ptask_create_param(hello,&params);
 	if (pid < 0) {
@@ -38,6 +40,5 @@ int main(){
 	}
 	create_deadline_handler(pid);
 	pthread_join(ptask_get_threadid(pid), 0);
-
 	return 0;
 }

@@ -14,19 +14,22 @@
 extern __thread int ptask_idx;
 struct str_time_deadline tab[MAX_TASKS];
 
+struct itimerspec its;
 
 /* functions */
 void timer_handler(int sig,siginfo_t *si,void *uc);
 int get_index_from_pid(int pid);
 
 
-
+/**
+* Retourne l'index du processus dans le tableau en fonction de son pid
+*/
 int get_index_from_pid(int pid){
 int i;
 for(i=0;i<MAX_TASKS;i++)
 	if(tab[i].pid == pid)
 		return i;
-return 0;
+return -1;
 }
 
 /**
@@ -36,28 +39,26 @@ void str_add(str_time_deadline str){
 
 int i;
 for(i=0;i<MAX_TASKS;i++)
-	//if(tab[i].pid==0){
+	if(tab[i].timer==0x0){
 		tab[i]=str;
-		printf("ajout effectue\n");
 		return;
-//	}	
+	}	
 
 }
 
 
 void timer_handler(int sig,siginfo_t *si,void *uc){
-printf("salut\n");
 int index = get_index_from_pid(sig);
-printf("temps exec : %ld\n",tab[index].temps_exec);
-printf("deadline : %ld\n",tab[index].dead_line);
-	tab[index].temps_exec=tab[index].temps_exec+tab[index].its.it_interval.tv_nsec;
+		tab[index].temps_exec=tab[index].temps_exec+tab[index].its.it_interval.tv_nsec;
 	if( tab[index].temps_exec>tab[index].dead_line){;
-		printf("fin d'exec : %ld\n",tab[index].dead_line);
-		timer_delete(tab[index].timer);
+		printf("fin d'exec : %ld\n",tab[index].temps_exec);
+		printf("dead_line : %ld\n",tab[index].dead_line);
 		kill(tab[index].pid,SIGKILL);
+		timer_delete(tab[index].timer);
 	}
-	else
-		timer_start(sig,10);
+	else{	
+		tab[index].temps_exec = 0;
+	}
 }
 
 void create_deadline_handler(int task_pid){
@@ -66,8 +67,8 @@ void create_deadline_handler(int task_pid){
 	int pid=task_pid;
 	timer_t timer;
 	struct itimerspec its;
-	unsigned long dead_line =ptask_get_deadline(ptask_idx,SEC);
-dead_line *= 1000000000;
+	unsigned long dead_line =(unsigned long)ptask_get_deadline(ptask_idx,SEC);
+dead_line = dead_line*1000000000;
 
 	/*Creation de la sigaction*/
 	sa.sa_handler = timer_handler;
@@ -87,8 +88,8 @@ dead_line *= 1000000000;
 	/*Creation de l'event*/
 	sev.sigev_notify = SIGEV_SIGNAL;
 	sev.sigev_signo =SIG;
-	sev.sigev_value.sival_ptr = &timer;
-	timer_create(CLOCK_REALTIME,&sev,&timer);
+	sev.sigev_value.sival_ptr = &(str.timer);
+	timer_create(CLOCK_REALTIME,&sev,&(str.timer));
 }
 
 
@@ -105,12 +106,9 @@ int index = get_index_from_pid(pid);
 	}
 	tab[index].its.it_interval.tv_sec = tab[index].its.it_value.tv_sec;
 	tab[index].its.it_interval.tv_nsec = tab[index].its.it_value.tv_nsec;
+	
 
-	printf("%d\n",tab[index].its.it_value.tv_nsec);
-	printf("%d\n",tab[index].its.it_value.tv_sec);
-	int u =timer_settime(tab[index].timer,0,&(tab[index].its),NULL);
-
-	if (u < 0) {
+	if (timer_settime(tab[index].timer,0,&(tab[index].its),NULL) < 0) {
 		printf("Erreur création timer\n");
 		exit(EXIT_FAILURE);
 	}

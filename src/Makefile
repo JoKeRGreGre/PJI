@@ -1,6 +1,6 @@
 CC = gcc
 LD = gcc
-CFLAGS = -Wall -I.
+CFLAGS = -Wall -g -I.
 SRCS = ptask.c pbarrier.c ptime.c pmutex.c tstat.c rtmode.c deadline_handler.c
 OBJS = ${SRCS:.c=.o}
 DOBJ = ${SRCS:.c=.do}
