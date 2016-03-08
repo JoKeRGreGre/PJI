@@ -13,8 +13,9 @@ sleep(1);
 	timer_start(pid,10);
 
 	for(i=1;i<=100;i++){
-		printf("hello\n");
+		reset_timer(pid);
 		ptask_wait_for_period();
+		printf("hello\n");
 	}
 
 }

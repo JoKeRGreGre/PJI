@@ -1,10 +1,11 @@
-typedef struct str_time_deadline{
-	unsigned long dead_line;	/*relativ deadline of the task*/
-	unsigned long temps_exec;	/*execution time of the timer*/ 
-	timer_t timer;			/*timer*/
-	struct itimerspec its;		/*structure du timer*/
-	int pid;			/*pid du processus*/
-}str_time_deadline;
+typedef struct str_time_deadline
+{
+  unsigned long dead_line;	/*relativ deadline of the task */
+  unsigned long temps_exec;	/*execution time of the timer */
+  timer_t timer;		/*timer */
+  struct itimerspec its;	/*structure du timer */
+  int pid;			/*pid du processus */
+} str_time_deadline;
 
 
 /**
@@ -15,9 +16,10 @@ typedef struct str_time_deadline{
 *	milisec : tic du timer (miliseconde)
 *	dl : echance (miliseconde)
 */
-void create_deadline_handler(int pid);
+void create_deadline_handler (int pid);
 
 /**
 * 	Demarre le timer du pid p avec un tic de timer toutes les m milisecondes
 */
-void timer_start(int p,int m);
+void timer_start (int pid, int m);
+void reset_timer (int pid);

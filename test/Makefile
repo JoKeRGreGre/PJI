@@ -60,7 +60,7 @@ task_aperiodic: $(OBJS_task_aperiodic) ../src/libptask.a
 	$(LD) -o $@ $^ $(LDFLAGS)
 
 yann: $(OBJS_yann) ../src/libptask.a
-	$(LD) -o $@ $^ $(LDFLAGS) -std=c99
+	$(LD) -o $@ $^ $(LDFLAGS)
 
 
 
