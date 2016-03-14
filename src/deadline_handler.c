@@ -39,11 +39,14 @@ str_add (str_time_deadline str)
 * utiliser cette fonction après chaque periode du processus
 */
 void
-reset_timer (int pid)
+reset_timer ()
 {
   tab[ptask_idx].temps_exec = 0;
 }
 
+void delete_timer(){
+      timer_delete (tab[ptask_idx].timer);
+}
 
 /**
 * Fonction lance par le timer a chaque tic
@@ -60,7 +63,8 @@ timer_handler (int sig, siginfo_t * si, void *uc)
 */
   if (tab[ptask_idx].temps_exec >= tab[ptask_idx].dead_line)
     {
-      kill (tab[ptask_idx].pid, SIGKILL);
+      //kill (tab[ptask_idx].pid, SIGKILL);
+	printf("tache terminée\n");
       timer_delete (tab[ptask_idx].timer);
     }
 }
@@ -68,6 +72,7 @@ timer_handler (int sig, siginfo_t * si, void *uc)
 void
 create_deadline_handler (int task_pid)
 {
+printf("nouvelle tache : %d\n",ptask_idx);
   struct sigevent sev;
   struct sigaction sa;
   int pid = task_pid;
@@ -102,7 +107,7 @@ create_deadline_handler (int task_pid)
 
 
 void
-timer_start (int pid, int milisec)
+timer_start (int milisec)
 {
   /*Creation du timer */
   if (milisec < 999)

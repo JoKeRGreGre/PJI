@@ -21,5 +21,6 @@ void create_deadline_handler (int pid);
 /**
 * 	Demarre le timer du pid p avec un tic de timer toutes les m milisecondes
 */
-void timer_start (int pid, int m);
-void reset_timer (int pid);
+void timer_start (int m);
+void reset_timer ();
+void delete_timer();
