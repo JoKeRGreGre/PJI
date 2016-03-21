@@ -7,19 +7,32 @@
 
 void hello(){
 	int i;
-sleep(1);
-	timer_start(10);
+    sleep(2);
+	timer_start(100);
 
 	for(i=1;i<=5;i++){
+		printf("%d\n",fibonacci(40));
 		reset_timer();
 		ptask_wait_for_period();
-		printf("hello\n");
 	}
+delete_timer();
 
 }
 
+int fibonacci(int n){
+if(n==0)
+return 0;
+else if(n==1)
+return 1;
+else
+return (fibonacci(n-1)+fibonacci(n-2));
+}
+
+#define NTASKS  4
 
 int main(){
+
+    int pid[NTASKS];
 
 	int i;
 	printf("init task\n");
@@ -33,14 +46,19 @@ int main(){
 	params.act_flag = NOW;
 	params.measure_flag = 1;
 
-	for(i=0;i<MAX_TASKS;i++) {
-	int pid = ptask_create_param(hello,&params);
-	if (pid < 0) {
-		printf("Sudo ... : %d\n",pid);
-		exit(EXIT_FAILURE);
-	}
-	create_deadline_handler(pid);
-	pthread_join(ptask_get_threadid(pid), 0);
-}
+	for(i=0;i<NTASKS;i++) {
+        pid[i] = ptask_create_param(hello, &params);
+        if (pid[i] < 0) {
+            printf("Sudo ... : %d\n",pid[i]);
+            exit(EXIT_FAILURE);
+        }
+        create_deadline_handler(pid[i]);
+    }
+
+    for (i=0; i<NTASKS;i++) {
+        pthread_join(ptask_get_threadid(pid[i]), 0);
+    }
+
+
 	return 0;
 }

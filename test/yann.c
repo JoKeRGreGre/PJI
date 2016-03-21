@@ -9,9 +9,9 @@ int pid;
 
 void hello(){
 	int i;
-sleep(1);
-	timer_start(pid,10);
-
+    sleep(1);
+	timer_start(10);
+    
 	for(i=1;i<=100;i++){
 		reset_timer(pid);
 		ptask_wait_for_period();

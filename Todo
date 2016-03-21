@@ -1,0 +1,6 @@
+-> soucis d'arret du timer, : le timer continuais de tourner meme apres avoir rencontre un depassement, le fonction delete timer ne suffisait pas : il fallais arreter le timer : mettre it.interval a 0
+
+
+-> soucis de terminaison dun thread quand un depassement etais rencontre : la fonction pthread_exit() etais plus approprié que kill() ou pthread_cancel();
+
+-> le test de depassement fonctionne avec plusieur thread et une fonction d'execution plus ou moin longues : fibonacci

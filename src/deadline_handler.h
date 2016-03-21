@@ -1,3 +1,10 @@
+#ifndef __DEADLINE_HANDLER_H__
+#define __DEADLINE_HANDLER_H__
+
+#include <time.h>
+#include <signal.h>
+
+
 typedef struct str_time_deadline
 {
   unsigned long dead_line;	/*relativ deadline of the task */
@@ -24,3 +31,6 @@ void create_deadline_handler (int pid);
 void timer_start (int m);
 void reset_timer ();
 void delete_timer();
+
+
+#endif

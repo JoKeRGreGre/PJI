@@ -1,3 +1,6 @@
+deadline_handler.o: deadline_handler.c ptask.h ptime.h rtmode.h \
+ deadline_handler.h
+deadline_handler.o: deadline_handler.h
 pbarrier.o: pbarrier.c pbarrier.h ptime.h pmutex.h
 pbarrier.o: pbarrier.h ptime.h
 pmutex.o: pmutex.c pmutex.h
