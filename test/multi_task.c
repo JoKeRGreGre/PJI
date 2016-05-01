@@ -25,12 +25,13 @@ hello ()
 {
   int i;
   sleep (2);
-  timer_start (100);
+  timer_start ();
 
-  for (i = 1; i <= 10; i++)
+  for (i = 1; i <=5; i++)
     {
-      printf ("%d\n", fibonacci (10));
-      reset_timer ();
+      resume_timer ();
+      printf ("	rslt : %d\n",fibonacci ((int) ptask_get_argument()));
+      pause_timer ();
       ptask_wait_for_period ();
     }
   delete_timer ();
@@ -52,7 +53,7 @@ main ()
 
   /*Reglages des parametres de la tache */
   tpars params = TASK_SPEC_DFL;
-  params.period = tspec_from (1, SEC);
+  params.period = tspec_from (3, SEC);
   ptask_param_deadline (params, 2, SEC);
   params.priority = 1;
   params.act_flag = NOW;
@@ -60,6 +61,8 @@ main ()
 
   for (i = 0; i < NTASKS; i++)
     {
+
+params.arg = (void*) 1+15*i;
       pid[i] = ptask_create_param (hello, &params);
       if (pid[i] < 0)
 	{

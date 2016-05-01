@@ -26,10 +26,12 @@ typedef struct str_time_deadline
 void create_deadline_handler (int pid);
 
 /**
-* 	Demarre le timer du pid p avec un tic de timer toutes les m milisecondes
+* 	Demarre le timer du pid p avec un tic de timer sur la deadline
 */
-void timer_start (int m);
-void reset_timer ();
+void timer_start ();
+//void reset_timer ();
+void pause_timer();
+void resume_timer();
 void delete_timer();
 
 

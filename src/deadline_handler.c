@@ -21,26 +21,46 @@ void timer_handler (int sig, siginfo_t * si, void *uc);
 /**
 * reset le temps d'execution du processus.
 * utiliser cette fonction après chaque periode du processus
-*/
+
 void
 reset_timer ()
 {
+timer_settime (tab[ptask_idx].timer, 0, &(tab[ptask_idx].its), NULL);
   printf ("timer [%d] reset\n", tab[ptask_idx].pid);
-  tab[ptask_idx].temps_exec = 0;
+}
+*/
+
+void
+pause_timer()
+{
+           sigset_t mask;
+
+           sigemptyset(&mask);
+           sigaddset(&mask, SIG);
+           if (sigprocmask(SIG_SETMASK, &mask, NULL) == -1)
+		  printf ("timer [%d] error pause\n", tab[ptask_idx].pid);
+
+}
+
+void
+resume_timer(){
+timer_settime (tab[ptask_idx].timer, 0, &(tab[ptask_idx].its), NULL);
+  printf ("timer [%d] reset\n", tab[ptask_idx].pid);
 }
 
 void
 delete_timer ()
 {
+
   if (!(tab[ptask_idx].its.it_interval.tv_sec == 0
 	&& tab[ptask_idx].its.it_interval.tv_nsec == 0))
     {
 
-      printf ("timer [%d] delete\n", tab[ptask_idx].pid);
       tab[ptask_idx].its.it_value.tv_sec = 0;
       tab[ptask_idx].its.it_value.tv_nsec = 0;
       tab[ptask_idx].its.it_interval.tv_sec = 0;
       tab[ptask_idx].its.it_interval.tv_nsec = 0;
+
       if (timer_settime (tab[ptask_idx].timer, 0, &(tab[ptask_idx].its), NULL)
 	  < 0)
 	{
@@ -50,6 +70,8 @@ delete_timer ()
 
       if (timer_delete (tab[ptask_idx].timer) < 0)
 	printf ("error suppression timer\n");
+
+      printf ("timer [%d] delete\n", tab[ptask_idx].pid);
     }
 
 }
@@ -61,22 +83,10 @@ void
 timer_handler (int sig, siginfo_t * si, void *uc)
 {
 
-  tab[ptask_idx].temps_exec += tab[ptask_idx].its.it_interval.tv_nsec;
-  /*
-     printf ("fin d'execution : \t%lu\n", tab[ptask_idx].temps_exec);
-     printf ("dead_line : \t\t%lu\n", tab[ptask_idx].dead_line);
-
-   */
-  //printf("tic processus %d\n",tab[ptask_idx].pid);
-  if (tab[ptask_idx].temps_exec > tab[ptask_idx].dead_line)
-    {
-      printf ("DEPASSEMMENT :timer [%d] temps exec : %ld > deadline : %ld\n",
-	      tab[ptask_idx].pid, tab[ptask_idx].temps_exec,
-	      tab[ptask_idx].dead_line);
+      printf ("DEPASSEMMENT :timer [%d]\n",
+	      tab[ptask_idx].pid);
       delete_timer ();
       pthread_exit (0);
-      //kill (tab[ptask_idx].pid, SIGKILL);
-    }
 }
 
 
@@ -122,17 +132,18 @@ create_deadline_handler (int task_pid)
 * Doit être lancé 1 fois par le processus après le creation du controleur
 */
 void
-timer_start (int milisec)
+timer_start ()
 {
+int nano=tab[ptask_idx].dead_line;
   /*Creation du timer */
-  if (milisec < 999)
+  if (nano < 99999)
     {
       tab[ptask_idx].its.it_value.tv_sec = 0;
-      tab[ptask_idx].its.it_value.tv_nsec = milisec * 1000000;
+      tab[ptask_idx].its.it_value.tv_nsec = nano;
     }
   else
     {
-      tab[ptask_idx].its.it_value.tv_sec = milisec / 1000;
+      tab[ptask_idx].its.it_value.tv_sec = nano / 1000000000;
       tab[ptask_idx].its.it_value.tv_nsec = 0;
     }
 
