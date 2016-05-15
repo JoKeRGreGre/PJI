@@ -10,7 +10,8 @@
 
 
 int
-fibonacci (int n){
+fibonacci (int n)
+{
   if (n == 0)
     return 0;
   else if (n == 1)
@@ -20,7 +21,8 @@ fibonacci (int n){
 }
 
 void
-hello (){
+hello ()
+{
   int i;
   sleep (2);
   timer_start ();
@@ -39,7 +41,8 @@ hello (){
 
 
 int
-main (){
+main ()
+{
 
   int pid[NTASKS];
 

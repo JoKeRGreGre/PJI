@@ -18,39 +18,26 @@ struct str_time_deadline tab[MAX_TASKS];
 void timer_handler (int sig, siginfo_t * si, void *uc);
 
 
-/**
-* reset le temps d'execution du processus.
-* utiliser cette fonction après chaque periode du processus
 
 void
-reset_timer ()
-{
-timer_settime (tab[ptask_idx].timer, 0, &(tab[ptask_idx].its), NULL);
-  printf ("timer [%d] reset\n", tab[ptask_idx].pid);
-}
-*/
+pause_timer (){
 
-void
-pause_timer()
-{
-           sigset_t mask;
+  sigset_t mask;
 
-           sigemptyset(&mask);
-           sigaddset(&mask, SIG);
-           if (sigprocmask(SIG_SETMASK, &mask, NULL) == -1)
-		  printf ("timer [%d] error pause\n", tab[ptask_idx].pid);
-
+  sigemptyset (&mask);
+  sigaddset (&mask, SIG);
+  if (sigprocmask (SIG_SETMASK, &mask, NULL) == -1)
+    printf ("timer [%d] error pause\n", tab[ptask_idx].pid);
 }
 
 void
-resume_timer(){
-timer_settime (tab[ptask_idx].timer, 0, &(tab[ptask_idx].its), NULL);
-  printf ("timer [%d] reset\n", tab[ptask_idx].pid);
+resume_timer (){
+  timer_settime (tab[ptask_idx].timer, 0, &(tab[ptask_idx].its), NULL);
+  //printf ("timer [%d]", tab[ptask_idx].pid);
 }
 
 void
-delete_timer ()
-{
+delete_timer (){
 
   if (!(tab[ptask_idx].its.it_interval.tv_sec == 0
 	&& tab[ptask_idx].its.it_interval.tv_nsec == 0))
@@ -64,7 +51,7 @@ delete_timer ()
       if (timer_settime (tab[ptask_idx].timer, 0, &(tab[ptask_idx].its), NULL)
 	  < 0)
 	{
-	  printf ("Erreur création timer\n");
+	  printf ("Erreur remise a 0 timer\n");
 	  exit (EXIT_FAILURE);
 	}
 
@@ -80,13 +67,11 @@ delete_timer ()
 * Fonction lance automatiquement par le timer a chaque tic
 */
 void
-timer_handler (int sig, siginfo_t * si, void *uc)
-{
+timer_handler (int sig, siginfo_t * si, void *uc){
 
-      printf ("DEPASSEMMENT :timer [%d]\n",
-	      tab[ptask_idx].pid);
-      delete_timer ();
-      pthread_exit (0);
+  printf ("DEPASSEMMENT :timer [%d]\n", tab[ptask_idx].pid);
+  delete_timer ();
+  pthread_exit (0);
 }
 
 
@@ -94,8 +79,7 @@ timer_handler (int sig, siginfo_t * si, void *uc)
 *Fonction pour creer le controleur d'echeance pour un processus donnée
 */
 void
-create_deadline_handler (int task_pid)
-{
+create_deadline_handler (int task_pid){
   printf ("nouvelle tache : %d\n", task_pid);
   struct sigevent sev;
   struct sigaction sa;
@@ -132,9 +116,8 @@ create_deadline_handler (int task_pid)
 * Doit être lancé 1 fois par le processus après le creation du controleur
 */
 void
-timer_start ()
-{
-int nano=tab[ptask_idx].dead_line;
+timer_start (){
+  int nano = tab[ptask_idx].dead_line;
   /*Creation du timer */
   if (nano < 99999)
     {

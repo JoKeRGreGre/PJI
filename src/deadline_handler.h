@@ -16,12 +16,9 @@ typedef struct str_time_deadline
 
 
 /**
-*	Creation d'un timer qui verifie le temps d'exection d'une tache toutes les p milisecondes si le *	prochain temps d'execution de la tache devrais dépasser l'echeance, un signal est envoyé pour 
-*	tuer le processus.
+*	Creation d'un timer handler, du timer associé. Le timer doit être lancé avec timer_start().
 *
 *	task_pid : pid du processus
-*	milisec : tic du timer (miliseconde)
-*	dl : echance (miliseconde)
 */
 void create_deadline_handler (int pid);
 
@@ -29,10 +26,25 @@ void create_deadline_handler (int pid);
 * 	Demarre le timer du pid p avec un tic de timer sur la deadline
 */
 void timer_start ();
+
+
 //void reset_timer ();
-void pause_timer();
-void resume_timer();
-void delete_timer();
+
+/**
+*	Met en pause le timer en stoppant l'envoi de signal, à utiliser après l'execution de la ou les fonctions du thread, juste avant d'attendre la fin de periode,
+cette fonction doit être appelé pour eviter que le timer tourne encore pendant l'attente active de la fin de periode du thread.
+*/
+void pause_timer ();
+
+/**
+*	Remet en route le timer en reinitialisant les parametres initiaux.
+*/
+void resume_timer ();
+
+/**
+*	Coupe l'execution du timer. 
+*/
+void delete_timer ();
 
 
 #endif
