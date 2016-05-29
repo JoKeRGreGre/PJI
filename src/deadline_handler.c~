@@ -21,25 +21,23 @@ void timer_handler (int sig, siginfo_t * si, void *uc);
 
 
 void
-pause_timer ()
-{
+pause_timer (){
 
-  if (timer_settime (tab[ptask_idx].timer, 0, &(tab[ptask_idx].sits), NULL)
-      < 0)
-    {
-      printf ("Erreur remise a 0 timer\n");
-      exit (EXIT_FAILURE);
-    }
+      if (timer_settime (tab[ptask_idx].timer, 0, &(tab[ptask_idx].sits), NULL)
+	  < 0)
+	{
+	  printf ("Erreur remise a 0 timer\n");
+	  exit (EXIT_FAILURE);
+	}
 }
 
 void
-resume_timer ()
-{
+resume_timer (){
 
   unsigned long nano = ptask_get_absolute_deadline (tab[ptask_idx].pid, NANO);
 
-  tab[ptask_idx].its.it_value.tv_sec = 0;
-  tab[ptask_idx].its.it_value.tv_nsec = nano;
+      tab[ptask_idx].its.it_value.tv_sec = 0;
+      tab[ptask_idx].its.it_value.tv_nsec = nano;
 
 
   tab[ptask_idx].its.it_interval.tv_sec = tab[ptask_idx].its.it_value.tv_sec;
@@ -52,14 +50,13 @@ resume_timer ()
 }
 
 void
-delete_timer ()
-{
+delete_timer (){
 
   if (!(tab[ptask_idx].its.it_interval.tv_sec == 0
 	&& tab[ptask_idx].its.it_interval.tv_nsec == 0))
     {
 
-      pause_timer ();
+pause_timer();
 
       if (timer_delete (tab[ptask_idx].timer) < 0)
 	printf ("error suppression timer\n");
@@ -68,13 +65,14 @@ delete_timer ()
     }
 
 
-  tspec wcet = ptask_get_wcet (ptask_idx);
-  tspec acet = ptask_get_avg (ptask_idx);
+	tspec wcet = ptask_get_wcet(ptask_idx);
+	tspec acet = ptask_get_avg(ptask_idx);
 
-  printf ("TASK %d: WCET = %ld\t ACET = %ld\t NINST=%d\n",
-	  ptask_idx,
-	  tspec_to (&wcet, MICRO),
-	  tspec_to (&acet, MICRO), ptask_get_numinstances (ptask_idx));
+	printf("TASK %d: WCET = %ld\t ACET = %ld\t NINST=%d\n", 
+	       ptask_idx, 
+	       tspec_to(&wcet, MICRO), 
+	       tspec_to(&acet, MICRO), 
+	       ptask_get_numinstances(ptask_idx)); 
 
 }
 
@@ -82,8 +80,7 @@ delete_timer ()
 * Fonction lance automatiquement par le timer a chaque tic
 */
 void
-timer_handler (int sig, siginfo_t * si, void *uc)
-{
+timer_handler (int sig, siginfo_t * si, void *uc){
 
   printf ("DEPASSEMMENT :timer [%d]\n", tab[ptask_idx].pid);
   pthread_exit (0);
@@ -95,18 +92,17 @@ timer_handler (int sig, siginfo_t * si, void *uc)
 *Fonction pour creer le controleur d'echeance pour un processus donnée
 */
 void
-create_deadline_handler (int task_pid)
-{
+create_deadline_handler (int task_pid){
   printf ("nouvelle tache : %d\n", task_pid);
   struct sigevent sev;
   struct sigaction sa;
   //timer_t timer;
   struct itimerspec its;
   struct itimerspec sits;
-  sits.it_value.tv_sec = 0;
-  sits.it_value.tv_nsec = 0;
-  sits.it_interval.tv_sec = 0;
-  sits.it_interval.tv_nsec = 0;
+      sits.it_value.tv_sec = 0;
+      sits.it_value.tv_nsec = 0;
+     sits.it_interval.tv_sec = 0;
+     sits.it_interval.tv_nsec = 0;
 
   unsigned long dead_line =
     (unsigned long) ptask_get_deadline (task_pid, NANO);
@@ -140,8 +136,7 @@ create_deadline_handler (int task_pid)
 * Doit être lancé 1 fois par le processus après le creation du controleur
 */
 void
-timer_start ()
-{
+timer_start (){
   int nano = tab[ptask_idx].dead_line;
   /*Creation du timer */
   if (nano < 99999)

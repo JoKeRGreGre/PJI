@@ -6,11 +6,12 @@
 #include "deadline_handler.h"
 
 
-#define NTASKS 10
+#define NTASKS 5
 
 
 int
-fibonacci (int n){
+fibonacci (int n)
+{
   if (n == 0)
     return 0;
   else if (n == 1)
@@ -20,7 +21,8 @@ fibonacci (int n){
 }
 
 void
-hello (){
+hello ()
+{
   int i;
   sleep (2);
   timer_start ();
@@ -39,7 +41,8 @@ hello (){
 
 
 int
-main (){
+main ()
+{
 
   int pid[NTASKS];
 
@@ -49,9 +52,9 @@ main (){
 
   /*Reglages des parametres de la tache */
   tpars params = TASK_SPEC_DFL;
-  params.period = tspec_from (5, SEC);
+  params.period = tspec_from (4, SEC);
   ptask_param_deadline (params, 2, SEC);
-  params.priority = 1;
+  params.priority = 99;
   params.act_flag = NOW;
   params.measure_flag = 1;
 

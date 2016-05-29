@@ -144,7 +144,8 @@ ptask_state ptask_get_state (int i);	/*< return the current task state       */
 /*----------------------------------------------------------------------------*/
 /*             Dinamically changing parameters                                */
 /*----------------------------------------------------------------------------*/
-int ptask_get_absolute_deadline (int i, int unit);
+int
+ptask_get_absolute_deadline (int i, int unit);
 /* return current absolute deadline */
 int ptask_get_deadline (int i, int unit);	/*< return current rel. dead   */
 void ptask_set_deadline (int i, int dline, int unit);	/*< set rel. dead   */
